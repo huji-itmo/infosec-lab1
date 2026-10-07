@@ -8,6 +8,7 @@
     number-align: center,
   )
   set text(font: ("Liberation Serif", "Libertinus Serif", "Noto Serif"), size: 14pt, lang: "ru", region: "RU")
+  set figure(supplement: [Рисунок])
   set par(justify: true, leading: 1.5em - 0.6548em, spacing: 1.5em - 0.6548em, first-line-indent: (amount: 1.25cm, all: true))
   set heading(numbering: "1.1")
   show heading: set par(justify: false)

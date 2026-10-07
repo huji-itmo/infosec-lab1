@@ -149,6 +149,13 @@ endpoint'ов. Сессии приложения работают в stateless-�
 SpotBugs, Dependency-Check и тесты. Отчёты SAST и SCA сохраняются как артефакты
 GitHub Actions.
 
+#figure(
+  image("img.png", width: 100%),
+  caption: [Результат выполнения CI/CD pipeline в GitHub Actions.],
+)
+
+
+
 = Выводы
 
 Разработано защищённое REST API на Java/Spring Boot с JWT-аутентификацией,
