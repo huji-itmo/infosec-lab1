@@ -12,7 +12,7 @@
   work-number: "1",
   student-name: "Григорьев Давид Владимирович",
   student-group: "Р3415",
-  reviewer-name: "________________________",
+  reviewer-name: "Маркина Татьяна Анатольевна",
   city: "Санкт-Петербург",
   year: "2026",
 )
