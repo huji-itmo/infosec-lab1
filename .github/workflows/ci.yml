@@ -1,0 +1,75 @@
+name: CI Pipeline with Security Scanners
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: infosec_lab1
+          POSTGRES_USER: appuser
+          POSTGRES_PASSWORD: appsecret123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready -U appuser -d infosec_lab1
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant gradlew execute permission
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/infosec_lab1
+          SPRING_DATASOURCE_USERNAME: appuser
+          SPRING_DATASOURCE_PASSWORD: appsecret123
+
+      # SAST: SpotBugs static analysis
+      - name: Run SpotBugs (SAST)
+        run: ./gradlew spotbugsMain spotbugsTest
+
+      # SCA: OWASP Dependency-Check
+      - name: Run OWASP Dependency-Check (SCA)
+        run: ./gradlew dependencyCheckAnalyze
+
+      - name: Run tests
+        run: ./gradlew test
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/infosec_lab1
+          SPRING_DATASOURCE_USERNAME: appuser
+          SPRING_DATASOURCE_PASSWORD: appsecret123
+
+      - name: Upload OWASP Dependency-Check report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: build/reports/dependency-check-report.html
+
+      - name: Upload SpotBugs report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotbugs-report
+          path: build/reports/spotbugs/
