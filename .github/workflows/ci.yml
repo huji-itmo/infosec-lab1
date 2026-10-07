@@ -9,20 +9,6 @@ on:
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_DB: infosec_lab1
-          POSTGRES_USER: appuser
-          POSTGRES_PASSWORD: appsecret123
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready -U appuser -d infosec_lab1
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -40,10 +26,6 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build -x test
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/infosec_lab1
-          SPRING_DATASOURCE_USERNAME: appuser
-          SPRING_DATASOURCE_PASSWORD: appsecret123
 
       # SAST: SpotBugs static analysis
       - name: Run SpotBugs (SAST)
@@ -55,10 +37,6 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/infosec_lab1
-          SPRING_DATASOURCE_USERNAME: appuser
-          SPRING_DATASOURCE_PASSWORD: appsecret123
 
       - name: Upload OWASP Dependency-Check report
         if: always()
