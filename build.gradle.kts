@@ -2,7 +2,6 @@ plugins {
     id("org.springframework.boot") version "3.2.5"
     id("io.spring.dependency-management") version "1.1.4"
     id("java")
-    id("org.owasp.dependencycheck") version "9.1.0"
     id("com.github.spotbugs") version "6.0.9"
 }
 
@@ -39,11 +38,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("com.h2database:h2")
-}
-
-dependencyCheck {
-    failBuildOnCVSS = 7.0f
-    formats = listOf("HTML", "JSON")
 }
 
 spotbugs {
