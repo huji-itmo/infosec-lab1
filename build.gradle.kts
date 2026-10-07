@@ -47,6 +47,12 @@ spotbugs {
     reportLevel.set(com.github.spotbugs.snom.Confidence.MEDIUM)
 }
 
+tasks.withType<com.github.spotbugs.snom.SpotBugsTask> {
+    reports.create("html") {
+        required.set(true)
+    }
+}
+
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
